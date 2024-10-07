@@ -108,7 +108,7 @@ function Navbar() {
               }}
               onClick={handleCloseNavMenu}
             >
-              <Link to="/makeup" className="mobile-app-bar-transition">
+              <Link to="/Makeup" className="mobile-app-bar-transition">
                 <div>
                   <ArrowForwardIcon
                     sx={{ fontSize: "1.2rem", color: "#555" }}
@@ -116,7 +116,7 @@ function Navbar() {
                   Makeup
                 </div>
               </Link>
-              <Link to="/skincare" className="mobile-app-bar-transition">
+              <Link to="/Skincare" className="mobile-app-bar-transition">
                 <div>
                   <ArrowForwardIcon
                     sx={{ fontSize: "1.2rem", color: "#555" }}
@@ -124,7 +124,7 @@ function Navbar() {
                   Skincare
                 </div>
               </Link>
-              <Link to="/haircare" className="mobile-app-bar-transition">
+              <Link to="/Haircare" className="mobile-app-bar-transition">
                 <div>
                   <ArrowForwardIcon
                     sx={{ fontSize: "1.2rem", color: "#555" }}
@@ -211,42 +211,42 @@ function Navbar() {
           }}
         >
           <Link
-            to="/makeup"
+            to="/Makeup"
             className=" desktop-app-bar "
             onClick={() => {
-              setMenu("makeup");
+              setMenu("Makeup");
             }}
             style={{
-              opacity: menu === "makeup" ? 1 : 0.7,
-              fontWeight: menu === "makeup" ? "bold" : "normal",
+              opacity: menu === "Makeup" ? 1 : 0.7,
+              fontWeight: menu === "Makeup" ? "bold" : "normal",
             }}
           >
             Makeup
           </Link>
 
           <Link
-            to="/skincare"
+            to="/Skincare"
             className="desktop-app-bar "
             onClick={() => {
-              setMenu("skincare");
+              setMenu("Skincare");
             }}
             style={{
-              opacity: menu === "skincare" ? 1 : 0.7,
-              fontWeight: menu === "skincare" ? "bold" : "normal",
+              opacity: menu === "Skincare" ? 1 : 0.7,
+              fontWeight: menu === "Skincare" ? "bold" : "normal",
             }}
           >
             Skincare
           </Link>
 
           <Link
-            to="/haircare"
+            to="/Haircare"
             className="desktop-app-bar"
             onClick={() => {
-              setMenu("haircare");
+              setMenu("Haircare");
             }}
             style={{
-              opacity: menu === "haircare" ? 1 : 0.7,
-              fontWeight: menu === "haircare" ? "bold" : "normal",
+              opacity: menu === "Haircare" ? 1 : 0.7,
+              fontWeight: menu === "Haircare" ? "bold" : "normal",
             }}
           >
             Haircare
@@ -268,9 +268,12 @@ function Navbar() {
           <Link
             to="/wishlist"
             className="desktop-app-bar"
+            onClick={() => {
+              setMenu("wishlist");
+            }}
             style={{
-                opacity: menu === "contact" ? 1 : 0.7,
-                fontWeight: menu === "contact" ? "bold" : "normal",
+                opacity: menu === "wishlist" ? 1 : 0.7,
+                fontWeight: menu === "wishlist" ? "bold" : "normal",
               display: localStorage.getItem("authToken") ? "block" : "none",
             }}
           >
@@ -279,9 +282,12 @@ function Navbar() {
           <Link
             to="/cart"
             className="desktop-app-bar"
+            onClick={() => {
+              setMenu("cart");
+            }}
             style={{
-                opacity: menu === "contact" ? 1 : 0.7,
-                fontWeight: menu === "contact" ? "bold" : "normal",
+                opacity: menu === "cart" ? 1 : 0.7,
+                fontWeight: menu === "cart" ? "bold" : "normal",
               display: localStorage.getItem("authToken") ? "block" : "none",
             }}
           >
@@ -342,7 +348,7 @@ function Navbar() {
                 display: localStorage.getItem("authToken") ? "block" : "none",
               }}
             >
-              <Link to="/orders" className="hover:text-black">
+              <Link to="/order" className="hover:text-black">
                 Orders
               </Link>
             </MenuItem>

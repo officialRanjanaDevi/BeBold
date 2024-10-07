@@ -1,8 +1,11 @@
 import React, { useRef, useState } from "react";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-const AddProduct = () => {
-  const [state, setState] = React.useState({
+import { Snackbar, Alert } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+const UpdateForm = (props) => {
+  const navigate = useNavigate();
+  const data = props.data;
+  const [state, setState] = useState({
     open: false,
     vertical: "top",
     horizontal: "center",
@@ -10,55 +13,59 @@ const AddProduct = () => {
   });
   const { vertical, horizontal, open, message } = state;
 
-  const handleClick = (newState, msg) => () => {
+  const handleClick = (newState, msg) => {
     setState({ ...newState, open: true, message: msg });
-    setTimeout(() => setState({ ...state, open: false }), 1500);
+    setTimeout(() => setState({ ...newState, open: false }), 1500);
+    setTimeout(navigate("/updateProduct"),1600);
   };
 
   const form = useRef();
   const [credentials, setCredentials] = useState({
-    name: "",
-    price: "",
-    discount: "",
-    description: "",
-    skintype: "",
-    category: ""
+    name: data.name,
+    price: data.price,
+    discount: data.discount,
+    description: data.description,
+    skintype: data.skintype,
+    category: data.category,
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch("http://localhost:3000/product", {
-        method: 'POST',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          productId: data._id,
           name: credentials.name,
           skintype: credentials.skintype,
           category: credentials.category,
           description: credentials.description,
           price: credentials.price,
-          discount: credentials.discount
-        })
+          discount: credentials.discount,
+        }),
       });
 
       const json = await response.json();
 
       if (json.success) {
-
-        setCredentials({
-          name: "",
-          price: "",
-          discount: "",
-          description: "",
-          skintype: "",
-          category: ""
-        });
+        handleClick({ vertical: "top", horizontal: "center" }, "Product updated");
+        setTimeout(() => {
+          setCredentials({
+            name: "",
+            price: "",
+            discount: "",
+            description: "",
+            skintype: "",
+            category: "",
+          });
+         
+        }, 1500);
       }
     } catch (error) {
-      console.error("Error during adding new product:", error);
+      console.error("Error during product updation:", error);
     }
   };
 
@@ -66,14 +73,22 @@ const AddProduct = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
+  // This function will handle file input (currently just a placeholder)
+  const handleFileChange = (e) => {
+    const files = e.target.files;
+    console.log(files);
+    // Handle the file upload here
+  };
+
   return (
-    <div className="w-full h-full rounded-md bg-neutral-100 shadow-md">
+    <div>
       <form
         ref={form}
         onSubmit={handleSubmit}
         className="bg-neutral-100 mx-auto w-[90vw] md:w-[70vw] p-6 rounded-lg"
       >
-        <h1 className="text-center font-bold text-lg">Add New Product</h1>
+        <h1 className="text-center font-bold text-lg">Update Product</h1>
+
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">
             Name
@@ -104,6 +119,7 @@ const AddProduct = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
+
           <div>
             <label htmlFor="category" className="block text-gray-700 text-sm font-bold mb-2">
               Choose a category:
@@ -112,10 +128,10 @@ const AddProduct = () => {
               name="category"
               onChange={onChange}
               value={credentials.category}
-
+              required
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option  >select category</option>
+              <option value="">Select category</option>
               <option value="Skincare">Skincare</option>
               <option value="Haircare">Haircare</option>
               <option value="Makeup">Makeup</option>
@@ -138,18 +154,19 @@ const AddProduct = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
+
           <div>
             <label htmlFor="skintype" className="block text-gray-700 text-sm font-bold mb-2">
               Best for skin type:
             </label>
             <select
               name="skintype"
-              id="skintype"
-              onChange={onChange}  // Ensure onChange is correctly added
+              required
+              onChange={onChange}
               value={credentials.skintype}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option value="">Select a skin type</option>  {/* Added default empty option */}
+              <option value="">Select a skin type</option>
               <option value="Dry">Dry</option>
               <option value="Normal">Normal</option>
               <option value="Oily">Oily</option>
@@ -166,7 +183,6 @@ const AddProduct = () => {
           <textarea
             onChange={onChange}
             placeholder="Enter description for Product"
-            type="text"
             name="description"
             rows={4}
             value={credentials.description}
@@ -183,6 +199,7 @@ const AddProduct = () => {
               </label>
               <input
                 type="file"
+                onChange={handleFileChange}
                 className="bg-white shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
@@ -190,19 +207,15 @@ const AddProduct = () => {
         </div>
 
         <button
-          onClick={handleClick(
-            { vertical: "top", horizontal: "center" },
-            "Product added"
-          )}
           type="submit"
           className="bg-black text-white text-sm hover:bg-neutral-700 font-bold py-2 px-12 rounded focus:outline-none focus:shadow-outline"
         >
-          Add
+          Update
         </button>
+
         <Snackbar
           anchorOrigin={{ vertical, horizontal }}
           open={open}
-
           sx={{ width: "10rem" }}
           key={vertical + horizontal}
         >
@@ -215,4 +228,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateForm;
